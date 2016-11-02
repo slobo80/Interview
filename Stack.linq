@@ -12,7 +12,10 @@ void Main()
 	stack.Pop().Dump("should be 5");
 	stack.Pop().Dump("should be 3");
 	stack.Pop().Dump("should be 1");
- }
+	stack.Push(8);
+	stack.Pop().Dump("should be 8");
+
+}
 
 public class StackX<T>
 {
