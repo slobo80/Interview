@@ -8,12 +8,12 @@ void Main()
 
 public Node BFSSearch(Node root, int x)
 {
-	var q = new QueueX();
-	q.Enqueue(root);
+	var q = new StackX();
+	q.Push(root);
 
 	while (q.Count > 0)
 	{
-		var item = q.Dequeue() as Node;
+		var item = q.Pop() as Node;
 		item.value.Dump("looking at");
 
 		if (item.value == x)
@@ -21,20 +21,20 @@ public Node BFSSearch(Node root, int x)
 			return item;
 		}
 
-		q.Enqueue(item.left);
-		q.Enqueue(item.right);
+		q.Push(item.right);
+		q.Push(item.left);
 	}
 
 	return null;
 }
 
-class QueueX : Queue
+class StackX : Stack
 {
-	public override void Enqueue(object obj)
+	public override void Push(object obj)
 	{
 		if (obj != null)
 		{
-			base.Enqueue(obj);
+			base.Push(obj);
 		}
 	}
 }
