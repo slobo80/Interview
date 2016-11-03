@@ -31,9 +31,12 @@ public class StackX<T>
 	}
 
 	private Item<T> top;
+	private static Semaphore sem = new Semaphore(1, 1);
 
 	public void Push(T item)
 	{
+		sem.WaitOne();
+		
 		if (top == null)
 		{
 			top = new Item<T>(item);
@@ -44,10 +47,14 @@ public class StackX<T>
 			newItem.prev = top;
 			top = newItem;
 		}
+		
+		sem.Release();
 	}
 
 	public T Pop()
 	{
+		sem.WaitOne();
+
 		if (this.IsEmpty())
 		{
 			throw new Exception("Stack empty");
@@ -55,17 +62,24 @@ public class StackX<T>
 
 		var value = top.value;
 		top = top.prev;
+		sem.Release();
+
 		return value;
 	}
 
 	public T Peek()
 	{
+		sem.WaitOne();
+
 		if (this.IsEmpty())
 		{
 			throw new Exception("Stack empty");
 		}
 
-		return top.value;
+		var value = top.value;
+		sem.Release();
+		
+		return value;
 	}
 
 	public bool IsEmpty()
