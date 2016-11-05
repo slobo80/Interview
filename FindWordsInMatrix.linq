@@ -4,25 +4,42 @@
 
 void Main()
 {
-	char[][] matrix = new char[][] { 
+	char[][] matrix = new char[][] {
 	new char[] { 'a', 'b', 'c' },
 	new char[] { 'd', 'e', 'f' },
 	new char[] { 'g', 'h', 'i' } };
 
-	FindAllWords(matrix).Dump();
+	FindAllWords(matrix);
 }
 
-public static List<string> FindAllWords(char[][] matrix)
+public static void FindAllWords(char[][] matrix)
 {
-	var root = BuildGraph(matrix).Dump();
-	Console.Write(root.Edge);
-
-	return null;
+	var graph = BuildGraph(matrix);
+	
+	foreach (var element in graph)
+	{
+		string cur = element.Value.Edge.ToString().Dump("Cell");
+		Print(element.Value, cur, Direction.Right);
+		Print(element.Value, cur, Direction.Bottom);
+		Print(element.Value, cur, Direction.Diagonal);
+	}
 }
 
-public static Node BuildGraph(char[][] matrix)
+public static void Print(Node element, string cur, Direction dir)
 {
-	var root = new Node(matrix[0][0], new List<Node>());
+	dir.Dump("Direction");
+	var neighbor = element.N.Where(e => e.direction.Equals(dir)).FirstOrDefault();
+
+	while (neighbor != null)
+	{
+		cur += neighbor.node.Edge;
+		Console.WriteLine(cur);
+		neighbor = neighbor.node.N.Where(e => e.direction.Equals(dir)).FirstOrDefault();
+	}
+}
+
+public static Dictionary<string, Node> BuildGraph(char[][] matrix)
+{
 	Dictionary<string, Node> hash = new Dictionary<string, Node>();
 
 	for (int r = 0; r < matrix.Length; r++)
@@ -38,75 +55,92 @@ public static Node BuildGraph(char[][] matrix)
 			}
 			else
 			{
-				current = new Node(matrix[r][c], key);
+				current = new Node(matrix[r][c], r, c);
 				hash.Add(current.id, current);
 			}
 
 			if (c < matrix[c].Length - 1)
 			{
-				AddChild(current, hash, matrix[r][c + 1], c + 1, r);
+				AddNeighbor(Direction.Right, current, hash, matrix[r][c + 1], r, c + 1);
 			}
 
 			if (r < matrix.Length - 1)
 			{
-				AddChild(current, hash, matrix[r + 1][c], c, r + 1);
+				AddNeighbor(Direction.Bottom, current, hash, matrix[r + 1][c], r + 1, c);
 			}
 
 			if (r < matrix.Length - 1 && c < matrix[c].Length - 1)
 			{
-				AddChild(current, hash, matrix[r + 1][c + 1], c + 1, r + 1);
+				AddNeighbor(Direction.Diagonal, current, hash, matrix[r + 1][c + 1], r + 1, c + 1);
 			}
 		}
 	}
 
-	return hash[Node.KeyFrom(0, 0)];
+	return hash;
 }
 
-public static void AddChild(Node current, Dictionary<string, Node> hash, char edge, int c, int r)
+public class Neighbor
 {
-	Node right;
-	string key = Node.KeyFrom(r, c);
+	public Direction direction;
+	public Node node;
 
-	if (hash.ContainsKey(key))
+	public Neighbor(Direction dir, Node node)
 	{
-		right = hash[key];
+		this.direction = dir;
+		this.node = node;
 	}
-	else
-	{
-		right = new Node(edge, key);
-		hash.Add(right.id, right);
-	}
-
-	current.AddChild(right);
 }
 
 public class Node
 {
 	public string id;
 	public char Edge;
-	public bool Visited = false;
-	public List<Node> N = new List<Node>();
+	public List<Neighbor> N = new List<Neighbor>();
 
-	public Node(char edge, List<Node> n)
+	public Node(char edge, int r, int c)
 	{
-		Edge = edge;
-		N = n;
-		//Visited = true;
-	}
-
-	public Node(char edge, string key)
-	{
-		this.id = key;
+		this.id = Node.KeyFrom(r, c);
 		Edge = edge;
 	}
 
-	public void AddChild(Node child)
+	public void AddNeighbor(Neighbor child)
 	{
 		N.Add(child);
 	}
 
 	public static string KeyFrom(int c, int r)
 	{
-		return r.ToString() + (c + 1).ToString();
+		return r.ToString() + (c).ToString();
 	}
 }
+
+public static void AddNeighbor(Direction dir, Node current, Dictionary<string, Node> hash, char edge, int r, int c)
+{
+	Node node;
+	string key = Node.KeyFrom(r, c);
+
+	if (hash.ContainsKey(key))
+	{
+		node = hash[key];
+	}
+	else
+	{
+		node = new Node(edge, r, c);
+		hash.Add(node.id, node);
+	}
+
+	var n = new Neighbor(dir, node);
+	current.AddNeighbor(n);
+}
+
+
+
+public enum Direction
+{
+	Top,
+	Bottom,
+	Left,
+	Right,
+	Diagonal
+}
+
