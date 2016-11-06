@@ -1,0 +1,60 @@
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-width=1">
+
+<style media="screen" type="text/css">
+
+@media screen {
+  body {
+    width: 75%;
+  }
+  li{
+  display: inline;
+		/*position: absolute;*/
+        }
+}
+
+@media print {
+  body {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 699px)  {
+  body {
+    background: #fac;
+  }
+  li{
+  display: block;
+		/*position: absolute;*/
+        }
+}
+
+@media only screen and (min-width: 700px)  {
+  body {
+    background: #88c;
+  }
+  li{
+  display: inline;
+		/*position: absolute;*/
+        }
+}
+
+#sidebar ul li a {
+  color: #900;
+  text-decoration: none;
+  padding: 3px 0; 
+  display: block;
+}
+
+</style>
+
+<body>
+<h1>Hello, my name is Slobo Stipic. What is your name?</h1>
+<ul id="nav">
+   <li><a data-email="chriscoyier@gmail.com" href="mailto:chriscoyier@gmail.com">Chris Coyier</a></li>
+   <li><a data-email="elisabeth@moss.com" href="mailto:elisabeth@moss.com">Elisabeth Moss</a></li>
+   <li><a data-email="amanda@righetti.com" href="mailto:amanda@righetti.com">Amanda Righetti</a></li>
+</ul>
+</body>
+
+</html>
