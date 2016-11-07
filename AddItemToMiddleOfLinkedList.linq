@@ -9,7 +9,7 @@ void Main()
 
 	var head = BuildTree.Build();
 
-	Console.WriteLine("Old list:");
+	Console.WriteLine("Old list with odd number of node:");
 	DumpList(head);
 
 	var fast = head;
@@ -21,12 +21,31 @@ void Main()
 		slow = slow.next;
 	}
 
-	slow.value.Dump("Middle");
+	slow.value.Dump("Middle element in odd number of nodes");
 
 	item.next = slow.next;
 	slow.next = item;
 
-	Console.WriteLine("New list:");
+	Console.WriteLine("New list with odd number of node:");
+	DumpList(head);
+
+	//-----------------------------------------------------------------------
+	// Add item to the list of even number of nodes
+	fast = head;
+	slow = head;
+
+	while (fast.next != null && fast.next.next != null)
+	{
+		fast = fast.next.next;
+		slow = slow.next;
+	}
+
+	slow.value.Dump("Middle element with even number of nodes");
+	Node newItem = new Node(999);
+	newItem.next = slow.next;
+	slow.next = newItem;
+
+	Console.WriteLine("New list with odd number of node:");
 	DumpList(head);
 }
 
