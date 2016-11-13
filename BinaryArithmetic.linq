@@ -4,6 +4,8 @@ void Main()
 {
 	int i = 0x15.Dump("Original");
 
+	Convert.ToString(~0, 2).Dump("All ones mask");
+
 	var result = i << 1;
 	//result.Dump("Shift left == multiplies by 2");
 
