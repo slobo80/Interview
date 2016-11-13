@@ -4,11 +4,10 @@
 // If it cannot be represented accurately with 32 chars, print "error".
 void Main()
 {
-	double x = 0.625;
+	double x = 0.72;
 	string result = string.Empty;
-	int count = 1;
 
-	while (x > 0 && count <= 32)
+	while (x > 0 && (result.Length <= 32))
 	{
 		x = x * 2;
 
@@ -21,14 +20,11 @@ void Main()
 		{
 			result += 0;
 		}
-
-		count++;
 	}
 	
 	if (x > 0)
 	{
 		"ERROR".Dump();
-		count.Dump();
 	}
 	else
 	{
